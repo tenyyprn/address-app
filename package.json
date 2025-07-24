@@ -1,0 +1,40 @@
+{
+  "name": "address-book-web-app",
+  "version": "2.0.0",
+  "description": "Modern web-based address book management system with responsive design",
+  "main": "index.html",
+  "scripts": {
+    "start": "open index.html",
+    "dev": "live-server .",
+    "build": "echo 'No build process needed - pure HTML/CSS/JS'",
+    "deploy": "echo 'Deployment handled by GitHub Actions'"
+  },
+  "keywords": [
+    "address-book",
+    "contact-management",
+    "web-app",
+    "html5",
+    "css3",
+    "javascript",
+    "responsive",
+    "offline",
+    "csv",
+    "localstorage"
+  ],
+  "author": "tenyyprn <your.email@example.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tenyyprn/address-app.git"
+  },
+  "homepage": "https://tenyyprn.github.io/address-app/",
+  "bugs": {
+    "url": "https://github.com/tenyyprn/address-app/issues"
+  },
+  "engines": {
+    "browser": "Chrome 90+, Firefox 88+, Safari 14+, Edge 90+"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}

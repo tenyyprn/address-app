@@ -1,0 +1,12 @@
+# 住所録管理システム - 最小依存関係
+# Address Book Management System - Minimal Dependencies
+
+# 環境変数管理（オプション - .envファイルを使用する場合のみ）
+python-dotenv>=1.0.0
+
+# 画像処理（オプション - 画像機能を使用する場合のみ）
+# Pillow>=10.0.0
+
+# 注意: このアプリケーションは主にPython標準ライブラリを使用しているため、
+# 基本機能の使用には追加のパッケージは必要ありません。
+# tkinter, sqlite3, logging, os, json, re などはすべて標準ライブラリです。

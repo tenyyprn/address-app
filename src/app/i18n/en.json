@@ -1,0 +1,37 @@
+{
+  "menu": {
+    "file": "File",
+    "edit": "Edit",
+    "view": "View",
+    "help": "Help"
+  },
+  "buttons": {
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "backup": "Backup",
+    "search": "Search"
+  },
+  "error_messages": {
+    "required_field": "This field is required.",
+    "invalid_email": "Please enter a valid email address.",
+    "duplicate_entry": "This entry already exists."
+  },
+  "dialog_titles": {
+    "add_contact": "Add Contact",
+    "edit_contact": "Edit Contact",
+    "search_contact": "Search Contact",
+    "settings": "Settings"
+  },
+  "tooltips": {
+    "add_button": "Click to add a new contact",
+    "edit_button": "Click to edit the selected contact",
+    "delete_button": "Click to delete the selected contact",
+    "backup_button": "Click to backup your address book"
+  },
+  "status_messages": {
+    "contact_added": "Contact added successfully.",
+    "contact_updated": "Contact updated successfully.",
+    "contact_deleted": "Contact deleted successfully."
+  }
+}

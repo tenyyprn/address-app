@@ -7,6 +7,10 @@
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
 
+## 🌐 デモ
+
+**👉 [ライブデモを見る](https://tenyyprn.github.io/address-app/) 👈**
+
 ## ✨ 機能 (Features)
 
 ### 🔥 **主要機能**
@@ -47,15 +51,15 @@
 ### **方法1: 直接ダウンロード**
 ```bash
 # GitHubからダウンロード
-curl -O https://raw.githubusercontent.com/your-username/address-app/main/index.html
+curl -O https://raw.githubusercontent.com/tenyyprn/address-app/main/index.html
 
 # またはwgetを使用
-wget https://raw.githubusercontent.com/your-username/address-app/main/index.html
+wget https://raw.githubusercontent.com/tenyyprn/address-app/main/index.html
 ```
 
 ### **方法2: リポジトリクローン**
 ```bash
-git clone https://github.com/your-username/address-app.git
+git clone https://github.com/tenyyprn/address-app.git
 cd address-app
 ```
 
@@ -320,8 +324,8 @@ location.reload();
 ## 📞 サポート (Support)
 
 ### **質問・問題報告**
-- **GitHub Issues**: https://github.com/your-username/address-app/issues
-- **ディスカッション**: https://github.com/your-username/address-app/discussions
+- **GitHub Issues**: https://github.com/tenyyprn/address-app/issues
+- **ディスカッション**: https://github.com/tenyyprn/address-app/discussions
 
 ### **機能要望**
 新機能のご要望は GitHub Issues にて「enhancement」ラベルを付けてご投稿ください。
@@ -338,7 +342,7 @@ location.reload();
 ```
 MIT License
 
-Copyright (c) 2024 Your Name
+Copyright (c) 2024 tenyyprn
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -362,9 +366,8 @@ SOFTWARE.
 ## ✨ 作者・謝辞 (Author & Acknowledgments)
 
 ### **作者**
-- **名前**: あなたの名前
-- **Email**: your.email@example.com
-- **GitHub**: https://github.com/your-username
+- **GitHub**: https://github.com/tenyyprn
+- **Email**: [設定次第で公開]
 
 ### **謝辞**
 - Web標準技術（HTML5, CSS3, JavaScript ES6+）
@@ -399,9 +402,13 @@ SOFTWARE.
 
 ## 🎯 今すぐ始める (Get Started Now)
 
+### **✨ オンラインで試す**
+**👉 [https://tenyyprn.github.io/address-app/](https://tenyyprn.github.io/address-app/) 👈**
+
+### **💻 ローカルで使用**
 ```bash
 # 1. ファイルをダウンロード
-curl -O https://raw.githubusercontent.com/your-username/address-app/main/index.html
+curl -O https://raw.githubusercontent.com/tenyyprn/address-app/main/index.html
 
 # 2. ブラウザで開く
 start index.html  # Windows
@@ -415,4 +422,7 @@ xdg-open index.html  # Linux
 **🎊 これで住所録管理システムの準備完了です！**
 
 シンプル、高速、安全な住所録管理をお楽しみください。
-"# address-app" 
+
+---
+
+⭐ **気に入ったらStarをお願いします！** ⭐

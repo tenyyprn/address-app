@@ -1,0 +1,10 @@
+Pythonパッケージ依存関係リスト
+- tkinter
+- sqlite3
+- Pillow
+- python-dotenv
+- pytest
+- pytest-cov
+- configparser
+- pandas
+- cryptography

@@ -1,0 +1,40 @@
+{
+  "app": {
+    "menu": {
+      "file": "ファイル",
+      "edit": "編集",
+      "view": "表示",
+      "help": "ヘルプ"
+    },
+    "buttons": {
+      "add": "追加",
+      "edit": "編集",
+      "delete": "削除",
+      "backup": "バックアップ",
+      "search": "検索"
+    },
+    "error_messages": {
+      "required_field": "必須項目です。",
+      "invalid_email": "無効なメールアドレスです。",
+      "database_error": "データベースエラーが発生しました。"
+    },
+    "dialog_titles": {
+      "add_contact": "連絡先の追加",
+      "edit_contact": "連絡先の編集",
+      "search_contact": "連絡先の検索",
+      "settings": "設定"
+    },
+    "tooltips": {
+      "add_button": "新しい連絡先を追加します。",
+      "edit_button": "選択した連絡先を編集します。",
+      "delete_button": "選択した連絡先を削除します。",
+      "backup_button": "データのバックアップを作成します。"
+    },
+    "status_messages": {
+      "contact_added": "連絡先が追加されました。",
+      "contact_updated": "連絡先が更新されました。",
+      "contact_deleted": "連絡先が削除されました。",
+      "backup_success": "バックアップが成功しました。"
+    }
+  }
+}

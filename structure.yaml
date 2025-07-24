@@ -1,0 +1,614 @@
+src:
+  structure.yaml:
+    content: |-
+        Pythonで住所録管理プログラムを作成するプロジェクト構造
+        - システム内容:
+          * GUI（Tkinter）による直感的な操作画面
+          * 住所録の追加・編集・削除・検索機能
+          * データの永続化（SQLite）
+          * バックアップ・復元機能
+          * CSV形式でのインポート/エクスポート機能
+          * 住所録の印刷機能
+        - 技術構成:
+          * プログラミング言語: Python 3.x
+          * GUI: Tkinter（標準ライブラリ）
+          * データベース: SQLite
+          * テストフレームワーク: pytest
+          * 環境管理: python-dotenv
+        - 主要機能:
+          * 個人情報管理（氏名、住所、電話番号、メールアドレス等）
+          * 検索・フィルタリング機能
+          * データのバックアップ・復元
+          * 多言語対応（日本語・英語）
+        - 目的:
+          * 個人や小規模組織での住所録管理を効率化
+          * 使いやすいGUIインターフェースの提供
+          * データの安全性と可搬性の確保
+    agent選定理由: |-
+      claude-3-5-sonnet-20241022は、プロジェクト全体の構成定義と要件整理に優れており、
+      Pythonアプリケーションの包括的な設計に適しているため選択しました。
+    api選定理由: このファイルはプロジェクト全体の構成を定義するものであり、外部APIは使用しません。
+    ref: "電卓(デスクトップアプリ) - shono22qk: PythonとTkinterを使用したGUIアプリケーションの構造参考"
+    dependency: []
+    agent: claude-3-5-sonnet-20241022
+    api: []
+  app:
+    main.py:
+      content: |-
+        住所録管理プログラムのメインエントリーポイント
+        - アプリケーションの初期化と起動
+        - 設定ファイルの読み込み
+        - データベース接続の確立
+        - メインGUIウィンドウの起動
+        - エラーハンドリングとログ設定
+        - アプリケーション終了時の処理
+      agent選定理由: |-
+        gemini-2.0-flash-expは、アプリケーションの起動処理や初期化ロジックの実装に適しており、
+        効率的な処理フローの設計に優れているため選択しました。
+      api選定理由: メインエントリーポイントでは外部APIを直接使用しないため不要です。
+      dependency:
+        - src/app/gui/main_window.py
+        - src/app/database/db_manager.py
+        - src/app/config/settings.py
+        - src/app/utils/logger.py
+      agent: gemini-2.0-flash-exp
+      api: []
+    gui:
+      main_window.py:
+        content: |-
+          メインGUIウィンドウクラスの実装
+          - Tkinterによるメインウィンドウの構築
+          - メニューバー（ファイル、編集、表示、ヘルプ）の作成
+          - 住所録一覧表示エリア（Treeviewウィジェット）
+          - 検索バー・フィルタリング機能
+          - ボタン配置（追加、編集、削除、バックアップ等）
+          - ステータスバーの表示
+          - ウィンドウサイズ・位置の保存・復元
+          - キーボードショートカットの実装
+        agent選定理由: |-
+          claude-3-5-sonnet-20241022は、TkinterによるGUIアプリケーションの実装に特化しており、
+          複雑なウィジェット配置やイベントハンドリングの実装に適しているため選択しました。
+        api選定理由: GUI表示機能では外部APIを使用しないため不要です。
+        dependency:
+          - src/app/gui/contact_dialog.py
+          - src/app/gui/search_dialog.py
+          - src/app/gui/settings_dialog.py
+          - src/app/database/contact_model.py
+          - src/app/utils/validator.py
+        agent: claude-3-5-sonnet-20241022
+        api: []
+      contact_dialog.py:
+        content: |-
+          住所録の追加・編集ダイアログクラス
+          - 入力フォームダイアログの作成
+          - フィールド：氏名、ふりがな、住所、電話番号、メールアドレス、誕生日、メモ
+          - 入力値検証（バリデーション）
+          - 画像添付機能（写真等）
+          - データの保存・更新処理
+          - エラーメッセージの表示
+          - 必須項目の強調表示
+        agent選定理由: |-
+          claude-3-5-sonnet-20241022は、フォーム処理やバリデーション機能の実装に優れており、
+          ユーザーインターフェースの詳細な制御に適しているため選択しました。
+        api選定理由: データ入力フォームでは外部APIを使用しないため不要です。
+        dependency:
+          - src/app/database/contact_model.py
+          - src/app/utils/validator.py
+          - src/app/utils/image_handler.py
+        agent: claude-3-5-sonnet-20241022
+        api: []
+      search_dialog.py:
+        content: |-
+          検索・フィルタリングダイアログクラス
+          - 高度な検索機能の実装
+          - 複数フィールドでの同時検索
+          - 部分一致・完全一致の選択
+          - 日付範囲での検索（誕生日等）
+          - 検索履歴の管理
+          - 検索結果のソート機能
+          - 検索条件の保存・読み込み
+        agent選定理由: |-
+          gemini-2.0-flash-exp は、検索ロジックの実装や条件処理に適しており、
+          効率的なフィルタリング機能の実装に優れているため選択しました。
+        api選定理由: 検索機能では外部APIを使用しないため不要です。
+        dependency:
+          - src/app/database/contact_model.py
+          - src/app/utils/search_engine.py
+        agent: gemini-2.0-flash-exp
+        api: []
+      settings_dialog.py:
+        content: |-
+          設定ダイアログクラス
+          - アプリケーション設定の管理
+          - 言語設定（日本語・英語）
+          - テーマ設定（カラーテーマ）
+          - フォント設定
+          - バックアップ設定（自動バックアップ間隔等）
+          - データベースパスの設定
+          - ウィンドウサイズ・位置のデフォルト設定
+        agent選定理由: |-
+          gpt-4o-mini は、設定管理機能の実装に適しており、
+          ユーザー設定の保存・読み込み処理に優れているため選択しました。
+        api選定理由: 設定管理では外部APIを使用しないため不要です。
+        dependency:
+          - src/app/config/settings.py
+          - src/app/i18n/translations.py
+        agent: gpt-4o-mini
+        api: []
+    database:
+      db_manager.py:
+        content: |-
+          データベース管理クラス
+          - SQLiteデータベースの接続・切断
+          - テーブルの作成・初期化
+          - データベースファイルの存在確認
+          - バックアップ・復元機能
+          - データベースの最適化（VACUUM）
+          - マイグレーション機能
+          - トランザクション管理
+          - エラーハンドリング
+        agent選定理由: |-
+          gpt-4o は、データベース管理の複雑なロジックとエラーハンドリングに優れており、
+          SQLiteの操作とトランザクション管理に適しているため選択しました。
+        api選定理由: データベース管理では外部APIを使用しないため不要です。
+        dependency:
+          - src/app/config/settings.py
+          - src/app/utils/logger.py
+        agent: gpt-4o
+        api: []
+      contact_model.py:
+        content: |-
+          住所録データモデルクラス
+          - Contactクラスの定義（住所録エンティティ）
+          - CRUD操作（作成、読み取り、更新、削除）
+          - データ検証機能
+          - データベーステーブルとのマッピング
+          - 検索・フィルタリング機能
+          - データのシリアライゼーション
+          - 重複チェック機能
+        agent選定理由: |-
+          gpt-4o は、データモデルの設計とCRUD操作の実装に優れており、
+          オブジェクト指向プログラミングでの複雑なデータ操作に適しているため選択しました。
+        api選定理由: データモデルでは外部APIを使用しないため不要です。
+        dependency:
+          - src/app/database/db_manager.py
+          - src/app/utils/validator.py
+        agent: gpt-4o
+        api: []
+      migration.py:
+        content: |-
+          データベースマイグレーション管理
+          - スキーマバージョン管理
+          - データベース構造の変更処理
+          - データの移行処理
+          - ロールバック機能
+          - マイグレーション履歴の管理
+          - 互換性チェック
+        agent選定理由: |-
+          gpt-4o は、データベースマイグレーションの複雑な処理とバージョン管理に適しており、
+          データ整合性の維持に優れているため選択しました。
+        api選定理由: マイグレーション処理では外部APIを使用しないため不要です。
+        dependency:
+          - src/app/database/db_manager.py
+          - src/app/config/settings.py
+        agent: gpt-4o
+        api: []
+    utils:
+      validator.py:
+        content: |-
+          データ検証ユーティリティクラス
+          - 入力値の妥当性チェック
+          - メールアドレス形式の検証
+          - 電話番号形式の検証
+          - 住所の妥当性チェック
+          - 日付形式の検証
+          - 文字数制限チェック
+          - 特殊文字の処理
+          - エラーメッセージの生成
+        agent選定理由: |-
+          gemini-2.0-flash-exp は、バリデーションロジックの実装に適しており、
+          効率的な検証処理とエラーハンドリングに優れているため選択しました。
+        api選定理由: データ検証では外部APIを使用しないため不要です。
+        dependency: []
+        agent: gemini-2.0-flash-exp
+        api: []
+      search_engine.py:
+        content: |-
+          検索エンジンユーティリティクラス
+          - 高度な検索機能の実装
+          - あいまい検索（ファジー検索）
+          - 正規表現検索
+          - 複数条件での検索
+          - 検索結果のランキング
+          - 検索パフォーマンスの最適化
+          - 検索履歴の管理
+        agent選定理由: |-
+          gemini-2.0-flash-exp は、検索アルゴリズムの実装に適しており、
+          効率的な検索処理とパフォーマンス最適化に優れているため選択しました。
+        api選定理由: 検索エンジンでは外部APIを使用しないため不要です。
+        dependency:
+          - src/app/database/contact_model.py
+        agent: gemini-2.0-flash-exp
+        api: []
+      image_handler.py:
+        content: |-
+          画像処理ユーティリティクラス
+          - 画像ファイルの読み込み・保存
+          - 画像のリサイズ・トリミング
+          - サポート形式（JPEG、PNG、GIF）
+          - 画像の圧縮処理
+          - サムネイル生成
+          - 画像の削除・管理
+          - エラーハンドリング
+        agent選定理由: |-
+          claude-3-5-sonnet-20241022 は、画像処理の実装に適しており、
+          ファイル操作とエラーハンドリングに優れているため選択しました。
+        api選定理由: 画像処理では外部APIを使用しないため不要です。
+        dependency:
+          - src/app/config/settings.py
+        agent: claude-3-5-sonnet-20241022
+        api: []
+      logger.py:
+        content: |-
+          ログ管理ユーティリティクラス
+          - ログレベルの設定（DEBUG、INFO、WARNING、ERROR）
+          - ログファイルの出力・ローテーション
+          - 実行時ログの記録
+          - エラーログの詳細記録
+          - デバッグ情報の出力
+          - ログフォーマットの設定
+        agent選定理由: |-
+          gpt-4o-mini は、ログ管理の実装に適しており、
+          標準的なログ機能の構築に優れているため選択しました。
+        api選定理由: ログ管理では外部APIを使用しないため不要です。
+        dependency:
+          - src/app/config/settings.py
+        agent: gpt-4o-mini
+        api: []
+      backup_manager.py:
+        content: |-
+          バックアップ管理ユーティリティクラス
+          - データベースの自動バックアップ
+          - バックアップファイルの管理
+          - スケジュールバックアップ
+          - バックアップの復元機能
+          - バックアップファイルの検証
+          - 世代管理（古いバックアップの削除）
+          - 圧縮バックアップ
+        agent選定理由: |-
+          gpt-4o は、バックアップ処理の複雑なロジックに適しており、
+          ファイル操作とスケジュール管理に優れているため選択しました。
+        api選定理由: バックアップ管理では外部APIを使用しないため不要です。
+        dependency:
+          - src/app/database/db_manager.py
+          - src/app/config/settings.py
+          - src/app/utils/logger.py
+        agent: gpt-4o
+        api: []
+      csv_handler.py:
+        content: |-
+          CSV入出力ユーティリティクラス
+          - CSV形式でのデータインポート
+          - CSV形式でのデータエクスポート
+          - 文字エンコーディング対応（UTF-8、Shift_JIS）
+          - フィールドマッピング機能
+          - データ変換・クリーニング
+          - インポート時の重複チェック
+          - エラーハンドリング
+        agent選定理由: |-
+          gemini-2.0-flash-exp は、CSVファイル処理に適しており、
+          データ変換と文字エンコーディング処理に優れているため選択しました。
+        api選定理由: CSVファイル処理では外部APIを使用しないため不要です。
+        dependency:
+          - src/app/database/contact_model.py
+          - src/app/utils/validator.py
+        agent: gemini-2.0-flash-exp
+        api: []
+    config:
+      settings.py:
+        content: |-
+          アプリケーション設定管理
+          - 設定ファイル（config.ini）の読み書き
+          - デフォルト設定値の定義
+          - 環境変数の読み込み
+          - データベースパスの設定
+          - GUI設定（フォント、テーマ、サイズ）
+          - バックアップ設定
+          - ログ設定
+          - 多言語設定
+        agent選定理由: |-
+          gpt-4o-mini は、設定管理の実装に適しており、
+          設定ファイルの読み書きと環境変数の処理に優れているため選択しました。
+        api選定理由: 設定管理では外部APIを使用しないため不要です。
+        dependency:
+          - src/config/.env
+        agent: gpt-4o-mini
+        api: []
+      constants.py:
+        content: |-
+          アプリケーション定数の定義
+          - データベーステーブル名
+          - フィールド名定数
+          - エラーメッセージ定数
+          - GUI設定定数（色、サイズ等）
+          - ファイルパス定数
+          - バリデーション定数
+          - アプリケーション情報（バージョン等）
+        agent選定理由: |-
+          gpt-4o-mini は、定数定義の整理に適しており、
+          保守性の高いコード構造の実装に優れているため選択しました。
+        api選定理由: 定数定義では外部APIを使用しないため不要です。
+        dependency: []
+        agent: gpt-4o-mini
+        api: []
+    i18n:
+      translations.py:
+        content: |-
+          多言語対応翻訳管理
+          - 日本語・英語の翻訳辞書
+          - GUI要素の翻訳
+          - エラーメッセージの翻訳
+          - 動的言語切り替え機能
+          - 翻訳ファイルの読み込み
+          - 言語設定の保存・復元
+          - 未翻訳項目の検出
+        agent選定理由: |-
+          gemini-2.0-flash-exp は、多言語対応の実装に適しており、
+          翻訳管理と動的言語切り替えに優れているため選択しました。
+        api選定理由: 翻訳管理では外部APIを使用しないため不要です。
+        dependency:
+          - src/app/config/settings.py
+        agent: gemini-2.0-flash-exp
+        api: []
+      ja.json:
+        content: |-
+          日本語翻訳辞書ファイル
+          - 全GUI要素の日本語テキスト
+          - メニュー項目の翻訳
+          - ボタンテキストの翻訳
+          - エラーメッセージの日本語版
+          - ダイアログタイトルの翻訳
+          - ツールチップテキストの翻訳
+          - ステータスメッセージの翻訳
+        agent選定理由: |-
+          gpt-4o-mini は、翻訳データの整理に適しており、
+          JSON形式でのデータ構造化に優れているため選択しました。
+        api選定理由: 翻訳辞書では外部APIを使用しないため不要です。
+        dependency: []
+        agent: gpt-4o-mini
+        api: []
+      en.json:
+        content: |-
+          英語翻訳辞書ファイル
+          - 全GUI要素の英語テキスト
+          - メニュー項目の英語翻訳
+          - ボタンテキストの英語版
+          - エラーメッセージの英語版
+          - ダイアログタイトルの英語翻訳
+          - ツールチップテキストの英語版
+          - ステータスメッセージの英語翻訳
+        agent選定理由: |-
+          gpt-4o-mini は、英語翻訳データの整理に適しており、
+          JSON形式でのデータ構造化に優れているため選択しました。
+        api選定理由: 翻訳辞書では外部APIを使用しないため不要です。
+        dependency: []
+        agent: gpt-4o-mini
+        api: []
+  tests:
+    test_contact_model.py:
+      content: |-
+        住所録データモデルのテストケース
+        - Contact クラスの機能テスト
+        - CRUD操作のテスト
+        - データ検証機能のテスト
+        - 検索機能のテスト
+        - エラーハンドリングのテスト
+        - データベース操作のテスト
+        - パフォーマンステスト
+      agent選定理由: |-
+        gpt-4o は、テストケースの実装に適しており、
+        包括的なテスト設計に優れているため選択しました。
+      api選定理由: テストケースでは外部APIを使用しないため不要です。
+      dependency:
+        - src/app/database/contact_model.py
+        - src/app/database/db_manager.py
+      agent: gpt-4o
+      api: []
+    test_validator.py:
+      content: |-
+        データ検証機能のテストケース
+        - バリデーション機能のテスト
+        - 入力値検証のテスト
+        - エラーメッセージ生成のテスト
+        - 境界値テスト
+        - 異常系テスト
+        - パフォーマンステスト
+      agent選定理由: |-
+        gemini-2.0-flash-exp は、バリデーションテストの実装に適しており、
+        効率的なテストケース設計に優れているため選択しました。
+      api選定理由: バリデーションテストでは外部APIを使用しないため不要です。
+      dependency:
+        - src/app/utils/validator.py
+      agent: gemini-2.0-flash-exp
+      api: []
+    test_search_engine.py:
+      content: |-
+        検索エンジンのテストケース
+        - 検索機能のテスト
+        - フィルタリング機能のテスト
+        - あいまい検索のテスト
+        - パフォーマンステスト
+        - 大量データでのテスト
+        - 異常系テスト
+      agent選定理由: |-
+        gemini-2.0-flash-exp は、検索機能のテストに適しており、
+        複雑な検索ロジックの検証に優れているため選択しました。
+      api選定理由: 検索エンジンテストでは外部APIを使用しないため不要です。
+      dependency:
+        - src/app/utils/search_engine.py
+        - src/app/database/contact_model.py
+      agent: gemini-2.0-flash-exp
+      api: []
+    conftest.py:
+      content: |-
+        pytest設定とフィクスチャ定義
+        - テスト用データベースのセットアップ
+        - テストデータの作成
+        - テスト環境の初期化
+        - モックデータの生成
+        - テスト後のクリーンアップ
+        - 共通フィクスチャの定義
+      agent選定理由: |-
+        gpt-4o は、pytest設定の実装に適しており、
+        テスト環境の構築とフィクスチャ設計に優れているため選択しました。
+      api選定理由: テスト設定では外部APIを使用しないため不要です。
+      dependency:
+        - src/app/database/db_manager.py
+        - src/app/config/settings.py
+      agent: gpt-4o
+      api: []
+  config:
+    .env:
+      content: |-
+        # 住所録管理プログラム環境変数
+        # データベース設定
+        DATABASE_PATH=./data/address_book.db
+
+        # バックアップ設定
+        BACKUP_PATH=./backups
+        BACKUP_INTERVAL=24
+        MAX_BACKUP_FILES=10
+
+        # ログ設定
+        LOG_LEVEL=INFO
+        LOG_PATH=./logs
+
+        # GUI設定
+        DEFAULT_THEME=light
+        DEFAULT_FONT_SIZE=12
+        DEFAULT_LANGUAGE=ja
+
+        # セキュリティ設定
+        ENCRYPTION_KEY=your_encryption_key_here
+
+        # 開発環境設定
+        DEBUG=False
+        TESTING=False
+      agent選定理由: |-
+        gpt-4o-mini は、環境変数設定の定義に適しており、
+        設定項目の整理に優れているため選択しました。
+      api選定理由: 環境変数設定では外部APIを使用しないため不要です。
+      dependency: []
+      agent: gpt-4o-mini
+      api: []
+    .env.local:
+      content: |-
+        # ローカル開発環境用設定
+        DEBUG=True
+        LOG_LEVEL=DEBUG
+        DATABASE_PATH=./data/address_book_dev.db
+        BACKUP_INTERVAL=1
+      agent選定理由: |-
+        gpt-4o-mini は、開発環境設定の定義に適しており、
+        ローカル設定の管理に優れているため選択しました。
+      api選定理由: 開発環境設定では外部APIを使用しないため不要です。
+      dependency: []
+      agent: gpt-4o-mini
+      api: []
+    .env.development:
+      content: |-
+        # 開発環境設定
+        DEBUG=True
+        TESTING=False
+        LOG_LEVEL=DEBUG
+        DATABASE_PATH=./data/address_book_dev.db
+      agent選定理由: gpt-4o-mini は、開発環境設定の管理に適しています。
+      api選定理由: 環境設定では外部APIを使用しません。
+      dependency: []
+      agent: gpt-4o-mini
+      api: []
+    .env.staging:
+      content: |-
+        # ステージング環境設定
+        DEBUG=False
+        TESTING=True
+        LOG_LEVEL=INFO
+        DATABASE_PATH=./data/address_book_staging.db
+      agent選定理由: gpt-4o-mini は、ステージング環境設定の管理に適しています。
+      api選定理由: 環境設定では外部APIを使用しません。
+      dependency: []
+      agent: gpt-4o-mini
+      api: []
+    .env.production:
+      content: |-
+        # 本番環境設定
+        DEBUG=False
+        TESTING=False
+        LOG_LEVEL=WARNING
+        DATABASE_PATH=./data/address_book.db
+        BACKUP_INTERVAL=24
+      agent選定理由: gpt-4o-mini は、本番環境設定の管理に適しています。
+      api選定理由: 環境設定では外部APIを使用しません。
+      dependency: []
+      agent: gpt-4o-mini
+      api: []
+  requirements.txt:
+    content: |-
+      Pythonパッケージ依存関係リスト
+      - tkinter（標準ライブラリ）
+      - sqlite3（標準ライブラリ）
+      - Pillow（画像処理）
+      - python-dotenv（環境変数管理）
+      - pytest（テストフレームワーク）
+      - pytest-cov（カバレッジ測定）
+      - configparser（設定ファイル処理）
+      - pandas（CSV処理用）
+      - cryptography（暗号化機能）
+    agent選定理由: |-
+      gpt-4o-mini は、依存関係の管理に適しており、
+      パッケージリストの整理に優れているため選択しました。
+    api選定理由: 依存関係リストでは外部APIを使用しないため不要です。
+    dependency: []
+    agent: gpt-4o-mini
+    api: []
+  README.md:
+    content: |-
+      住所録管理プログラムのドキュメント作成
+      - プロジェクト概要と目的
+      - 機能一覧と特徴
+      - システム要件とインストール手順
+      - 使用方法とGUI操作説明
+      - 設定ファイルの説明
+      - バックアップ・復元手順
+      - トラブルシューティング
+      - 開発者向け情報
+      - ライセンス情報
+      - バージョン履歴
+
+      目次（各セクションの文字数）：
+      1. 概要（300文字）
+      2. 機能説明（500文字）
+      3. インストール（400文字）
+      4. 使用方法（600文字）
+      5. 設定（300文字）
+      6. トラブルシューティング（400文字）
+
+      文章テイスト：
+      - 初心者にもわかりやすい丁寧な説明
+      - 具体的な操作手順を含む
+      - 図解やスクリーンショットを想定した説明
+
+      デザイン・フォント：
+      - Markdownの標準書式を使用
+      - 見出しの階層を明確に
+      - コードブロックの適切な使用
+    agent選定理由: |-
+      claude-3-5-sonnet-20241022 は、技術ドキュメントの作成に優れており、
+      ユーザー向け説明書の執筆に適しているため選択しました。
+    api選定理由: ドキュメント作成では外部APIを使用しないため不要です。
+    dependency:
+      - src/app/main.py
+      - src/requirements.txt
+      - src/docker/docker-compose.yml
+    agent: claude-3-5-sonnet-20241022
+    api: []

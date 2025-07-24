@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>住所録管理システム</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Yu Gothic', 'Hiragino Sans', 'Meiryo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .toolbar {
+            background: #f8f9fa;
+            padding: 20px 30px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #28a745, #1e7e34);
+            color: white;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #dc3545, #c82333);
+            color: white;
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+        }
+
+        .search-box {
+            position: relative;
+            min-width: 300px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-box::before {
+            content: "🔍";
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .contact-grid {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        }
+
+        .contact-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .contact-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .contact-name {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .contact-furigana {
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+        }
+
+        .contact-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
+
+        .contact-info {
+            margin-top: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .info-icon {
+            width: 20px;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .info-text {
+            flex: 1;
+            color: #555;
+            word-break: break-all;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #666;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .close {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .close:hover {
+            opacity: 0.7;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        .modal-footer {
+            padding: 20px 30px;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            min-width: 120px;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn-group {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .search-box {
+                min-width: auto;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            z-index: 1001;
+            opacity: 0;
+            transform: translateX(400px);
+            transition: all 0.3s ease;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: linear-gradient(45deg, #28a745, #20c997);
+        }
+
+        .notification.error {
+            background: linear-gradient(45deg, #dc3545, #e74c3c);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ヘッダー -->
+        <header class="header">
+            <h1>📇 住所録管理システム</h1>
+            <p>Contact Management System</p>
+        </header>
+
+        <!-- ツールバー -->
+        <div class="toolbar">
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="openModal('add')">
+                    ➕ 新規追加
+                </button>
+                <button class="btn btn-success" onclick="exportData()">
+                    📤 エクスポート
+                </button>
+                <button class="btn btn-secondary" onclick="importData()">
+                    📥 インポート
+                </button>
+                <button class="btn btn-danger" onclick="clearAllData()">
+                    🗑️ 全削除
+                </button>
+            </div>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="名前、電話番号、メールで検索..." 
+                       oninput="searchContacts()">
+            </div>
+        </div>
+
+        <!-- メインコンテンツ -->
+        <main class="main-content">
+            <!-- 統計情報 -->
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalContacts">0</div>
+                    <div class="stat-label">総連絡先数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="withPhone">0</div>
+                    <div class="stat-label">電話番号あり</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="withEmail">0</div>
+                    <div class="stat-label">メールあり</div>
+                </div>
+            </div>
+
+            <!-- 連絡先グリッド -->
+            <div id="contactGrid" class="contact-grid">
+                <!-- 連絡先カードがここに動的に生成されます -->
+            </div>
+
+            <!-- 空の状態 -->
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <h3>📪 連絡先がありません</h3>
+                <p>「新規追加」ボタンをクリックして最初の連絡先を追加しましょう</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- モーダルダイアログ -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">新規連絡先</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">名前 <span class="required">*</span></label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="furigana">ふりがな</label>
+                        <input type="text" id="furigana" name="furigana">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">電話番号</label>
+                        <input type="tel" id="phone" name="phone" placeholder="例: 03-1234-5678">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">メールアドレス</label>
+                        <input type="email" id="email" name="email" placeholder="例: example@domain.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">住所</label>
+                        <textarea id="address" name="address" placeholder="例: 東京都渋谷区..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthday">生年月日</label>
+                        <input type="date" id="birthday" name="birthday">
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">メモ</label>
+                        <textarea id="notes" name="notes" placeholder="自由記入欄"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">キャンセル</button>
+                <button type="button" class="btn btn-primary" onclick="saveContact()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知 -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // データストレージ
+        let contacts = [];
+        let currentEditId = null;
+
+        // 初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSampleData();
+            renderContacts();
+            updateStats();
+        });
+
+        // サンプルデータの読み込み
+        function loadSampleData() {
+            const sampleContacts = [
+                {
+                    id: 1,
+                    name: "山田太郎",
+                    furigana: "やまだたろう",
+                    phone: "03-1234-5678",
+                    email: "yamada@example.com",
+                    address: "東京都渋谷区神南1-1-1",
+                    birthday: "1990-01-15",
+                    notes: "営業部の責任者"
+                },
+                {
+                    id: 2,
+                    name: "佐藤花子",
+                    furigana: "さとうはなこ",
+                    phone: "090-8765-4321",
+                    email: "sato@example.com",
+                    address: "大阪府大阪市北区梅田2-2-2",
+                    birthday: "1985-03-22",
+                    notes: "マーケティング担当"
+                },
+                {
+                    id: 3,
+                    name: "田中一郎",
+                    furigana: "たなかいちろう",
+                    phone: "052-111-2222",
+                    email: "tanaka@example.com",
+                    address: "愛知県名古屋市中区栄3-3-3",
+                    birthday: "1992-07-08",
+                    notes: "技術部エンジニア"
+                }
+            ];
+
+            // ローカルストレージから読み込み
+            const savedContacts = localStorage.getItem('addressbook_contacts');
+            if (savedContacts) {
+                try {
+                    contacts = JSON.parse(savedContacts);
+                } catch (e) {
+                    console.error('データの読み込みに失敗しました:', e);
+                    contacts = sampleContacts;
+                    saveToLocalStorage();
+                }
+            } else {
+                contacts = sampleContacts;
+                saveToLocalStorage();
+            }
+        }
+
+        // ローカルストレージに保存
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem('addressbook_contacts', JSON.stringify(contacts));
+            } catch (e) {
+                console.error('データの保存に失敗しました:', e);
+                showNotification('データの保存に失敗しました', 'error');
+            }
+        }
+
+        // 連絡先の描画
+        function renderContacts(filteredContacts = null) {
+            const contactGrid = document.getElementById('contactGrid');
+            const emptyState = document.getElementById('emptyState');
+            const contactsToRender = filteredContacts || contacts;
+
+            if (contactsToRender.length === 0) {
+                contactGrid.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            contactGrid.style.display = 'grid';
+            emptyState.style.display = 'none';
+            contactGrid.innerHTML = '';
+
+            contactsToRender.forEach(contact => {
+                const contactCard = createContactCard(contact);
+                contactGrid.appendChild(contactCard);
+            });
+        }
+
+        // 連絡先カードの作成
+        function createContactCard(contact) {
+            const card = document.createElement('div');
+            card.className = 'contact-card fade-in';
+            
+            card.innerHTML = `
+                <div class="contact-header">
+                    <div>
+                        <div class="contact-name">${escapeHtml(contact.name || '')}</div>
+                        ${contact.furigana ? `<div class="contact-furigana">${escapeHtml(contact.furigana)}</div>` : ''}
+                    </div>
+                    <div class="contact-actions">
+                        <button class="btn btn-primary btn-sm" onclick="editContact(${contact.id})" title="編集">
+                            ✏️
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteContact(${contact.id})" title="削除">
+                            🗑️
+                        </button>
+                    </div>
+                </div>
+                <div class="contact-info">
+                    ${contact.phone ? `
+                        <div class="info-item">
+                            <span class="info-icon">📞</span>
+                            <span class="info-text">${escapeHtml(contact.phone)}</span>
+                        </div>
+                    ` : ''}
+                    ${contact.email ? `
+                        <div class="info-item">
+                            <span class="info-icon">📧</span>
+                            <span class="info-text">${escapeHtml(contact.email)}</span>
+                        </div>
+                    ` : ''}
+                    ${contact.address ? `
+                        <div class="info-item">
+                            <span class="info-icon">🏠</span>
+                            <span class="info-text">${escapeHtml(contact.address)}</span>
+                        </div>
+                    ` : ''}
+                    ${contact.birthday ? `
+                        <div class="info-item">
+                            <span class="info-icon">🎂</span>
+                            <span class="info-text">${formatDate(contact.birthday)}</span>
+                        </div>
+                    ` : ''}
+                    ${contact.notes ? `
+                        <div class="info-item">
+                            <span class="info-icon">📝</span>
+                            <span class="info-text">${escapeHtml(contact.notes)}</span>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+
+            return card;
+        }
+
+        // HTML エスケープ
+        function escapeHtml(text) {
+            if (!text) return '';
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return String(text).replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+
+        // 日付フォーマット
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('ja-JP', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            } catch (e) {
+                return dateString;
+            }
+        }
+
+        // 統計情報の更新
+        function updateStats() {
+            document.getElementById('totalContacts').textContent = contacts.length;
+            document.getElementById('withPhone').textContent = contacts.filter(c => c.phone && c.phone.trim()).length;
+            document.getElementById('withEmail').textContent = contacts.filter(c => c.email && c.email.trim()).length;
+        }
+
+        // モーダルを開く
+        function openModal(mode, contactId = null) {
+            const modal = document.getElementById('contactModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const form = document.getElementById('contactForm');
+
+            if (mode === 'add') {
+                modalTitle.textContent = '新規連絡先';
+                form.reset();
+                currentEditId = null;
+            } else if (mode === 'edit') {
+                modalTitle.textContent = '連絡先編集';
+                const contact = contacts.find(c => c.id === contactId);
+                if (contact) {
+                    fillForm(contact);
+                    currentEditId = contactId;
+                }
+            }
+
+            modal.style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('name').focus();
+            }, 100);
+        }
+
+        // フォームにデータを埋める
+        function fillForm(contact) {
+            document.getElementById('name').value = contact.name || '';
+            document.getElementById('furigana').value = contact.furigana || '';
+            document.getElementById('phone').value = contact.phone || '';
+            document.getElementById('email').value = contact.email || '';
+            document.getElementById('address').value = contact.address || '';
+            document.getElementById('birthday').value = contact.birthday || '';
+            document.getElementById('notes').value = contact.notes || '';
+        }
+
+        // モーダルを閉じる
+        function closeModal() {
+            document.getElementById('contactModal').style.display = 'none';
+            currentEditId = null;
+        }
+
+        // 連絡先を保存
+        function saveContact() {
+            const form = document.getElementById('contactForm');
+            const formData = new FormData(form);
+            
+            const contactData = {
+                name: (formData.get('name') || '').trim(),
+                furigana: (formData.get('furigana') || '').trim(),
+                phone: (formData.get('phone') || '').trim(),
+                email: (formData.get('email') || '').trim(),
+                address: (formData.get('address') || '').trim(),
+                birthday: formData.get('birthday') || '',
+                notes: (formData.get('notes') || '').trim()
+            };
+
+            // バリデーション
+            if (!contactData.name) {
+                showNotification('名前は必須項目です', 'error');
+                document.getElementById('name').focus();
+                return;
+            }
+
+            if (contactData.email && !isValidEmail(contactData.email)) {
+                showNotification('メールアドレスの形式が正しくありません', 'error');
+                document.getElementById('email').focus();
+                return;
+            }
+
+            try {
+                if (currentEditId) {
+                    // 編集モード
+                    const index = contacts.findIndex(c => c.id === currentEditId);
+                    if (index !== -1) {
+                        contacts[index] = { ...contacts[index], ...contactData };
+                    }
+                    showNotification('連絡先を更新しました', 'success');
+                } else {
+                    // 新規追加モード
+                    const newId = Math.max(0, ...contacts.map(c => c.id || 0)) + 1;
+                    contacts.push({ id: newId, ...contactData });
+                    showNotification('連絡先を追加しました', 'success');
+                }
+
+                saveToLocalStorage();
+                renderContacts();
+                updateStats();
+                closeModal();
+            } catch (e) {
+                console.error('保存エラー:', e);
+                showNotification('保存に失敗しました', 'error');
+            }
+        }
+
+        // 連絡先を編集
+        function editContact(id) {
+            openModal('edit', id);
+        }
+
+        // 連絡先を削除
+        function deleteContact(id) {
+            const contact = contacts.find(c => c.id === id);
+            if (contact && confirm(`「${contact.name}」を削除しますか？`)) {
+                contacts = contacts.filter(c => c.id !== id);
+                saveToLocalStorage();
+                renderContacts();
+                updateStats();
+                showNotification('連絡先を削除しました', 'success');
+            }
+        }
+
+        // 全データ削除
+        function clearAllData() {
+            if (confirm('すべての連絡先を削除しますか？この操作は取り消せません。')) {
+                contacts = [];
+                saveToLocalStorage();
+                renderContacts();
+                updateStats();
+                showNotification('すべての連絡先を削除しました', 'success');
+            }
+        }
+
+        // 検索
+        function searchContacts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            
+            if (!searchTerm) {
+                renderContacts();
+                return;
+            }
+
+            const filteredContacts = contacts.filter(contact => 
+                (contact.name || '').toLowerCase().includes(searchTerm) ||
+                (contact.furigana || '').toLowerCase().includes(searchTerm) ||
+                (contact.phone || '').includes(searchTerm) ||
+                (contact.email || '').toLowerCase().includes(searchTerm) ||
+                (contact.address || '').toLowerCase().includes(searchTerm) ||
+                (contact.notes || '').toLowerCase().includes(searchTerm)
+            );
+
+            renderContacts(filteredContacts);
+        }
+
+        // データをエクスポート（CSV形式）
+        function exportData() {
+            if (contacts.length === 0) {
+                showNotification('エクスポートするデータがありません', 'error');
+                return;
+            }
+
+            try {
+                const BOM = '\uFEFF'; // UTF-8 BOM
+                const header = '名前,ふりがな,電話番号,メールアドレス,住所,生年月日,メモ\n';
+                const csvContent = BOM + header + contacts.map(contact => 
+                    [
+                        contact.name || '',
+                        contact.furigana || '',
+                        contact.phone || '',
+                        contact.email || '',
+                        contact.address || '',
+                        contact.birthday || '',
+                        contact.notes || ''
+                    ].map(field => `"${String(field).replace(/"/g, '""')}"`)
+                    .join(',')
+                ).join('\n');
+
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', `contacts_${new Date().toISOString().split('T')[0]}.csv`);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                showNotification('データをエクスポートしました', 'success');
+            } catch (e) {
+                console.error('エクスポートエラー:', e);
+                showNotification('エクスポートに失敗しました', 'error');
+            }
+        }
+
+        // データをインポート
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.csv';
+            input.onchange = function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const csv = e.target.result;
+                            const lines = csv.split('\n');
+                            
+                            // ヘッダー行をスキップ
+                            let importedCount = 0;
+                            const maxId = Math.max(0, ...contacts.map(c => c.id || 0));
+                            
+                            for (let i = 1; i < lines.length; i++) {
+                                const line = lines[i].trim();
+                                if (line) {
+                                    // CSVパース（簡易版）
+                                    const values = parseCSVLine(line);
+                                    if (values.length >= 1 && values[0].trim()) {
+                                        contacts.push({
+                                            id: maxId + importedCount + 1,
+                                            name: values[0] || '',
+                                            furigana: values[1] || '',
+                                            phone: values[2] || '',
+                                            email: values[3] || '',
+                                            address: values[4] || '',
+                                            birthday: values[5] || '',
+                                            notes: values[6] || ''
+                                        });
+                                        importedCount++;
+                                    }
+                                }
+                            }
+                            
+                            saveToLocalStorage();
+                            renderContacts();
+                            updateStats();
+                            showNotification(`${importedCount}件の連絡先をインポートしました`, 'success');
+                        } catch (error) {
+                            console.error('インポートエラー:', error);
+                            showNotification('ファイルの読み込みに失敗しました', 'error');
+                        }
+                    };
+                    reader.readAsText(file, 'UTF-8');
+                }
+            };
+            input.click();
+        }
+
+        // CSV行のパース
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                const nextChar = line[i + 1];
+                
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        current += '"';
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current);
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            
+            result.push(current);
+            return result;
+        }
+
+        // メールアドレスの妥当性チェック
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // 通知表示
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // モーダル外クリックで閉じる
+        window.onclick = function(event) {
+            const modal = document.getElementById('contactModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Escキーでモーダルを閉じる
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
